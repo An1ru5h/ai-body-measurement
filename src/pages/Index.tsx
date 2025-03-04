@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
@@ -188,13 +187,7 @@ const Index = () => {
               <Webcam width={640} height={480} />
             </div>
             <div>
-              <LandmarkVisualization 
-                landmarks={mockLandmarks}
-                connections={mockConnections}
-                width={640}
-                height={480}
-                className="w-full h-full bg-black/5 backdrop-blur-sm"
-              />
+              <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
             </div>
           </div>
         </div>
@@ -229,7 +222,9 @@ const Index = () => {
         </div>
         
         {viewMode === 'live' ? (
-          <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
+          <div className="hidden">
+            <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
+          </div>
         ) : (
           <div id="history" className="scroll-mt-20">
             <MeasurementHistory />
