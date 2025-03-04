@@ -1,84 +1,74 @@
 
 import React from 'react';
-import { Download } from 'lucide-react';
-import { 
-  MeasurementGroup, 
-  PoseMeasurements, 
-  downloadCSV, 
-  saveMeasurementToHistory,
-  formatMeasurements 
-} from '../utils/measurements';
+import { Measurement, downloadCSV } from '../utils/measurements';
+import { Download, Shield } from 'lucide-react';
 
 interface MeasurementDisplayProps {
-  measurements: PoseMeasurements;
-  isLive?: boolean;
+  measurements: Measurement[];
+  isLive: boolean;
 }
 
-const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ 
-  measurements, 
-  isLive = false 
-}) => {
-  const formattedGroups = formatMeasurements(measurements);
-  
-  const handleSave = () => {
-    saveMeasurementToHistory(measurements);
-  };
+const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ measurements, isLive }) => {
+  const avgConfidence = measurements.reduce((sum, m) => sum + m.confidence, 0) / measurements.length;
   
   const handleExport = () => {
     downloadCSV(measurements);
   };
   
   return (
-    <div className="smooth-transition">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white rounded-lg border border-border shadow-sm animate-fade-in">
+      <div className="border-b border-border p-4 flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold tracking-tight">Body Measurements</h2>
-          <p className="text-sm text-muted-foreground">{isLive ? "Live Analysis" : "Measured on " + new Date().toLocaleDateString()}</p>
+          <h2 className="text-lg font-semibold tracking-tight">Body Measurements</h2>
+          <p className="text-sm text-muted-foreground">
+            {isLive ? 'Current measurements in real-time' : 'Previous measurement session'}
+          </p>
         </div>
         
-        <div className="flex gap-3">
-          <button 
-            onClick={handleSave}
-            className="px-4 py-2 rounded-md border border-border bg-white text-sm hover:bg-secondary transition-colors"
-          >
-            Save
-          </button>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 px-2 py-1 bg-accent/10 text-accent rounded-md text-xs">
+            <Shield className="w-3 h-3" />
+            <span>{(avgConfidence * 100).toFixed(0)}% Confidence</span>
+          </div>
+          
           <button 
             onClick={handleExport}
-            className="px-4 py-2 rounded-md bg-accent text-white text-sm flex items-center gap-2 hover:bg-accent/90 transition-colors"
+            className="p-2 rounded-md hover:bg-secondary transition-colors"
+            title="Download CSV"
           >
             <Download className="w-4 h-4" />
-            Export
           </button>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {formattedGroups.map((group) => (
-          <MeasurementGroupCard key={group.id} group={group} />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-interface MeasurementGroupCardProps {
-  group: MeasurementGroup;
-}
-
-const MeasurementGroupCard: React.FC<MeasurementGroupCardProps> = ({ group }) => {
-  return (
-    <div className="measurement-card animate-scale-in">
-      <h3 className="font-medium mb-3">{group.title}</h3>
-      <div className="space-y-2">
-        {group.measurements.map((measurement) => (
-          <div key={measurement.id} className="flex justify-between items-center py-1 border-b border-border last:border-0">
-            <span className="text-sm">{measurement.name}</span>
-            <span className="font-mono text-sm font-medium">
-              {measurement.value} {measurement.unit}
-            </span>
-          </div>
-        ))}
+      <div className="p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {measurements.map((measurement) => (
+            <div 
+              key={measurement.id}
+              className="p-3 border border-border rounded-md hover:bg-secondary/50 transition-colors"
+            >
+              <div className="text-sm font-medium text-muted-foreground mb-1">
+                {measurement.name}
+              </div>
+              <div className="text-2xl font-semibold tracking-tight">
+                {measurement.value.toFixed(1)}
+                <span className="text-sm font-normal text-muted-foreground ml-1">
+                  {measurement.unit}
+                </span>
+              </div>
+              <div className="mt-1 h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-accent"
+                  style={{ width: `${measurement.confidence * 100}%` }}
+                ></div>
+              </div>
+              <div className="mt-1 text-xs text-right text-muted-foreground">
+                {(measurement.confidence * 100).toFixed(0)}% confidence
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
