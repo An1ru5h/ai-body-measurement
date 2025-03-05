@@ -62,9 +62,9 @@ const Index = () => {
     setIsCapturing(true);
     setCaptureProgress(0);
     
-    const duration = 7 * 60; // 7 minutes in seconds
-    const interval = 1000; // Update every second
-    const increment = 100 / duration;
+    const duration = 60; // 60 seconds (1 minute) instead of 7 minutes
+    const interval = 100; // Update progress every 100ms for smoother animation
+    const increment = 100 / duration / (1000 / interval);
     
     const timer = setInterval(() => {
       setCaptureProgress(prev => {
@@ -116,7 +116,7 @@ const Index = () => {
               
               <div className="hidden md:flex items-center gap-2">
                 <Timer className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">7 min session</span>
+                <span className="text-sm text-muted-foreground">1 min scan</span>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ const Index = () => {
             <div className="mb-6">
               <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-accent transition-all duration-300 ease-linear"
+                  className="h-full bg-accent transition-all duration-100 ease-linear"
                   style={{ width: `${captureProgress}%` }}
                 ></div>
               </div>
