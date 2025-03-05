@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
 import MeasurementDisplay from '../components/MeasurementDisplay';
-import MeasurementHistory from '../components/MeasurementHistory';
 import { mockMeasurements } from '../utils/measurements';
 import { Play, Pause, Timer, Info } from 'lucide-react';
 
@@ -22,7 +21,6 @@ interface Connection {
 const Index = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureProgress, setCaptureProgress] = useState(0);
-  const [viewMode, setViewMode] = useState<'live' | 'history'>('live');
   
   const mockLandmarks: Landmark[] = [
     { id: "nose", x: 320, y: 120 },
@@ -147,45 +145,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
-        <div className="flex space-x-2 border-b border-border mb-6">
-          <button
-            onClick={() => setViewMode('live')}
-            className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              viewMode === 'live' 
-                ? 'text-accent' 
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            Live Measurements
-            {viewMode === 'live' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-accent"></div>
-            )}
-          </button>
-          <button
-            onClick={() => setViewMode('history')}
-            className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-              viewMode === 'history' 
-                ? 'text-accent' 
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            Measurement History
-            {viewMode === 'history' && (
-              <div className="absolute bottom-0 left-0 w-full h-0.5 bg-accent"></div>
-            )}
-          </button>
-        </div>
-        
-        {viewMode === 'live' ? (
-          <div className="hidden">
-            <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
-          </div>
-        ) : (
-          <div id="history" className="scroll-mt-20">
-            <MeasurementHistory />
-          </div>
-        )}
       </section>
       
       <section id="about" className="scroll-mt-20">
