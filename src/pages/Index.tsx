@@ -86,11 +86,11 @@ const Index = () => {
   return (
     <PoseLayout>
       <section id="measurement" className="mb-16 scroll-mt-20">
-        <div className="bg-white rounded-lg border border-border shadow-sm p-6 mb-10 animate-fade-in">
+        <div className="bg-white dark:bg-black rounded-lg border border-[#e0e0e0] dark:border-[#222] shadow-sm p-6 mb-10 animate-fade-in">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-semibold tracking-tight">Capture Measurements</h2>
-              <p className="text-sm text-muted-foreground">
+              <h2 className="text-xl font-semibold tracking-tight text-black dark:text-white">Capture Measurements</h2>
+              <p className="text-sm text-[#666] dark:text-[#999]">
                 Stand in front of your camera for accurate body measurements
               </p>
             </div>
@@ -99,7 +99,7 @@ const Index = () => {
               {isCapturing ? (
                 <button 
                   onClick={stopCapture}
-                  className="px-4 py-2 rounded-md bg-destructive/10 text-destructive text-sm flex items-center gap-2 hover:bg-destructive/20 transition-colors"
+                  className="px-4 py-2 rounded-md bg-[#f0f0f0] dark:bg-[#222] text-black dark:text-white text-sm flex items-center gap-2 hover:bg-[#e8e8e8] dark:hover:bg-[#333] transition-colors"
                 >
                   <Pause className="w-4 h-4" />
                   Stop
@@ -107,7 +107,7 @@ const Index = () => {
               ) : (
                 <button 
                   onClick={startCapture}
-                  className="px-4 py-2 rounded-md bg-accent text-white text-sm flex items-center gap-2 hover:bg-accent/90 transition-colors"
+                  className="px-4 py-2 rounded-md bg-black dark:bg-white text-white dark:text-black text-sm flex items-center gap-2 hover:bg-[#222] dark:hover:bg-[#e0e0e0] transition-colors"
                 >
                   <Play className="w-4 h-4" />
                   Start Capture
@@ -115,29 +115,29 @@ const Index = () => {
               )}
               
               <div className="hidden md:flex items-center gap-2">
-                <Timer className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">1 min scan</span>
+                <Timer className="w-4 h-4 text-[#666] dark:text-[#999]" />
+                <span className="text-sm text-[#666] dark:text-[#999]">1 min scan</span>
               </div>
             </div>
           </div>
           
           {isCapturing && (
             <div className="mb-6">
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+              <div className="h-1.5 bg-[#eaeaea] dark:bg-[#222] rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-accent transition-all duration-100 ease-linear"
+                  className="h-full bg-black dark:bg-white transition-all duration-100 ease-linear"
                   style={{ width: `${captureProgress}%` }}
                 ></div>
               </div>
               <div className="flex justify-between mt-2">
-                <span className="text-xs text-muted-foreground">Capturing...</span>
-                <span className="text-xs font-medium">{Math.round(captureProgress)}%</span>
+                <span className="text-xs text-[#666] dark:text-[#999]">Capturing...</span>
+                <span className="text-xs font-medium text-black dark:text-white">{Math.round(captureProgress)}%</span>
               </div>
             </div>
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
+            <div className="border border-[#e0e0e0] dark:border-[#222] rounded-lg overflow-hidden">
               <Webcam width={640} height={480} />
             </div>
             <div>
@@ -148,29 +148,29 @@ const Index = () => {
       </section>
       
       <section id="about" className="scroll-mt-20">
-        <div className="bg-white rounded-lg border border-border shadow-sm p-6 animate-fade-in">
+        <div className="bg-white dark:bg-black rounded-lg border border-[#e0e0e0] dark:border-[#222] shadow-sm p-6 animate-fade-in">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-full bg-accent/10">
-              <Info className="w-5 h-5 text-accent" />
+            <div className="p-2 rounded-full bg-[#f0f0f0] dark:bg-[#222]">
+              <Info className="w-5 h-5 text-black dark:text-white" />
             </div>
-            <h2 className="text-xl font-semibold tracking-tight">About the Technology</h2>
+            <h2 className="text-xl font-semibold tracking-tight text-black dark:text-white">About the Technology</h2>
           </div>
           
-          <div className="prose max-w-none">
+          <div className="prose max-w-none text-[#333] dark:text-[#ccc]">
             <p>
               Harmony uses advanced computer vision and machine learning to detect and track body landmarks in real-time. 
               By analyzing the spatial relationships between these landmarks, we can calculate precise body measurements.
             </p>
             
-            <h3>How It Works</h3>
-            <ol>
-              <li><strong>Pose Detection:</strong> Our algorithm identifies 33 key body landmarks in real-time.</li>
-              <li><strong>Measurement Calculation:</strong> We analyze the distances between landmarks to determine measurements.</li>
-              <li><strong>Calibration:</strong> The system calibrates to provide accurate real-world measurements.</li>
-              <li><strong>Data Collection:</strong> Multiple measurements are taken over time to ensure accuracy.</li>
+            <h3 className="text-black dark:text-white">How It Works</h3>
+            <ol className="list-decimal list-inside space-y-2">
+              <li><strong className="text-black dark:text-white">Pose Detection:</strong> Our algorithm identifies 33 key body landmarks in real-time.</li>
+              <li><strong className="text-black dark:text-white">Measurement Calculation:</strong> We analyze the distances between landmarks to determine measurements.</li>
+              <li><strong className="text-black dark:text-white">Calibration:</strong> The system calibrates to provide accurate real-world measurements.</li>
+              <li><strong className="text-black dark:text-white">Data Collection:</strong> Multiple measurements are taken over time to ensure accuracy.</li>
             </ol>
             
-            <h3>Applications</h3>
+            <h3 className="text-black dark:text-white">Applications</h3>
             <p>
               Our technology can be used for custom clothing sizing, fitness tracking, healthcare monitoring, 
               ergonomic assessments, and more. The possibilities are endless!
