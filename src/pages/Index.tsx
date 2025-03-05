@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
@@ -5,6 +6,18 @@ import MeasurementDisplay from '../components/MeasurementDisplay';
 import MeasurementHistory from '../components/MeasurementHistory';
 import { mockMeasurements } from '../utils/measurements';
 import { Play, Pause, Timer, Info } from 'lucide-react';
+
+// Define types that were previously imported from LandmarkVisualization
+interface Landmark {
+  id: string;
+  x: number;
+  y: number;
+}
+
+interface Connection {
+  from: string;
+  to: string;
+}
 
 const Index = () => {
   const [isCapturing, setIsCapturing] = useState(false);
