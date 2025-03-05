@@ -12,7 +12,6 @@ const Index = () => {
   const [captureProgress, setCaptureProgress] = useState(0);
   const [viewMode, setViewMode] = useState<'live' | 'history'>('live');
   
-  // Mock landmarks - in a real app these would come from the pose detection
   const mockLandmarks: Landmark[] = [
     { id: "nose", x: 320, y: 120 },
     { id: "left_eye", x: 300, y: 110 },
@@ -53,7 +52,6 @@ const Index = () => {
     setIsCapturing(true);
     setCaptureProgress(0);
     
-    // Simulate progress - in a real app, this would be based on the actual capture progress
     const duration = 7 * 60; // 7 minutes in seconds
     const interval = 1000; // Update every second
     const increment = 100 / duration;
@@ -78,55 +76,39 @@ const Index = () => {
   return (
     <PoseLayout>
       <section id="hero" className="mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 md:pr-6">
-            <div className="animate-fade-in">
-              <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium mb-4">
-                <div className="w-1.5 h-1.5 rounded-full bg-accent mr-1.5"></div>
-                Body Measurement Technology
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-4">
-                Precise Body <br/>
-                <span className="text-accent">Measurements</span>
-              </h1>
-              
-              <p className="text-muted-foreground text-lg mb-6">
-                Transform how you measure the human body with our advanced pose estimation technology. Get accurate measurements in minutes.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => document.getElementById('measurement')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 py-3 rounded-md bg-accent text-white hover:bg-accent/90 transition-colors flex items-center justify-center gap-2"
-                >
-                  Start Measuring
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                
-                <button 
-                  onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 py-3 rounded-md border border-border hover:bg-secondary transition-colors flex items-center justify-center gap-2"
-                >
-                  Learn More
-                  <ChevronDown className="w-4 h-4" />
-                </button>
-              </div>
+        <div className="space-y-6 md:pr-6 max-w-2xl mx-auto text-center">
+          <div className="animate-fade-in">
+            <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-accent/10 text-accent text-xs font-medium mb-4">
+              <div className="w-1.5 h-1.5 rounded-full bg-accent mr-1.5"></div>
+              Body Measurement Technology
             </div>
-          </div>
-          
-          <div className="relative">
-            <div className="aspect-[4/3] rounded-lg overflow-hidden subtle-shadow animate-scale-in">
-              <LandmarkVisualization 
-                landmarks={mockLandmarks}
-                connections={mockConnections}
-                width={640}
-                height={480}
-                className="w-full h-full"
-              />
+            
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-4">
+              Precise Body <br/>
+              <span className="text-accent">Measurements</span>
+            </h1>
+            
+            <p className="text-muted-foreground text-lg mb-6">
+              Transform how you measure the human body with our advanced pose estimation technology. Get accurate measurements in minutes.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={() => document.getElementById('measurement')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 py-3 rounded-md bg-accent text-white hover:bg-accent/90 transition-colors flex items-center justify-center gap-2"
+              >
+                Start Measuring
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              
+              <button 
+                onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 py-3 rounded-md border border-border hover:bg-secondary transition-colors flex items-center justify-center gap-2"
+              >
+                Learn More
+                <ChevronDown className="w-4 h-4" />
+              </button>
             </div>
-            <div className="absolute -bottom-6 -left-6 w-40 h-40 bg-accent/10 rounded-full filter blur-3xl -z-10"></div>
-            <div className="absolute -top-6 -right-6 w-40 h-40 bg-accent/10 rounded-full filter blur-3xl -z-10"></div>
           </div>
         </div>
       </section>
