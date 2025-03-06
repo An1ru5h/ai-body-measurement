@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
@@ -136,7 +137,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="border border-[#e0e0e0] dark:border-[#222] rounded-lg overflow-hidden">
-              <Webcam width={640} height={480} />
+              <Webcam width={640} height={480} isCapturing={isCapturing} />
             </div>
             <div>
               <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
