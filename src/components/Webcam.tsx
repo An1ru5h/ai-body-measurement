@@ -44,14 +44,14 @@ const Webcam: React.FC<WebcamProps> = ({ width, height }) => {
   }, [width, height]);
   
   return (
-    <div className="relative w-full h-full bg-black/5 backdrop-blur-sm rounded-lg overflow-hidden" style={{ minHeight: '400px' }}>
+    <div className="relative w-full h-full bg-black/5 backdrop-blur-sm rounded-lg overflow-hidden" style={{ minHeight: '600px' }}>
       <video 
         ref={videoRef}
         autoPlay
         playsInline
         muted
         className="w-full h-full object-cover"
-        style={{ minHeight: '400px' }}
+        style={{ minHeight: '600px' }}
       />
     </div>
   );
