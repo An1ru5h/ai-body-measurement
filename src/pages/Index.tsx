@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
@@ -6,7 +5,6 @@ import MeasurementDisplay from '../components/MeasurementDisplay';
 import { mockMeasurements } from '../utils/measurements';
 import { Play, Pause, Timer, Info } from 'lucide-react';
 
-// Define types that were previously imported from LandmarkVisualization
 interface Landmark {
   id: string;
   x: number;
@@ -158,23 +156,15 @@ const Index = () => {
           
           <div className="prose max-w-none text-[#333] dark:text-[#ccc]">
             <p>
-              Harmony uses advanced computer vision and machine learning to detect and track body landmarks in real-time. 
-              By analyzing the spatial relationships between these landmarks, we can calculate precise body measurements.
+              Harmony uses advanced computer vision and machine learning to detect body landmarks in real-time and calculate precise measurements.
             </p>
             
             <h3 className="text-black dark:text-white">How It Works</h3>
-            <ol className="list-decimal list-inside space-y-2">
-              <li><strong className="text-black dark:text-white">Pose Detection:</strong> Our algorithm identifies 33 key body landmarks in real-time.</li>
-              <li><strong className="text-black dark:text-white">Measurement Calculation:</strong> We analyze the distances between landmarks to determine measurements.</li>
-              <li><strong className="text-black dark:text-white">Calibration:</strong> The system calibrates to provide accurate real-world measurements.</li>
-              <li><strong className="text-black dark:text-white">Data Collection:</strong> Multiple measurements are taken over time to ensure accuracy.</li>
-            </ol>
-            
-            <h3 className="text-black dark:text-white">Applications</h3>
-            <p>
-              Our technology can be used for custom clothing sizing, fitness tracking, healthcare monitoring, 
-              ergonomic assessments, and more. The possibilities are endless!
-            </p>
+            <ul className="list-disc list-inside space-y-1">
+              <li><strong className="text-black dark:text-white">Pose Detection:</strong> Identifies 33 key body landmarks</li>
+              <li><strong className="text-black dark:text-white">Measurement:</strong> Analyzes distances between landmarks</li>
+              <li><strong className="text-black dark:text-white">Data Collection:</strong> Takes multiple readings for accuracy</li>
+            </ul>
           </div>
         </div>
       </section>
