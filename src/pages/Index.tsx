@@ -84,9 +84,9 @@ const Index = () => {
   
   return (
     <PoseLayout>
-      <section id="measurement" className="mb-16 scroll-mt-20">
-        <div className="bg-white dark:bg-black rounded-lg border border-[#e0e0e0] dark:border-[#222] shadow-sm p-6 mb-10 animate-fade-in">
-          <div className="flex items-center justify-between mb-6">
+      <section id="measurement" className="mb-8 scroll-mt-20">
+        <div className="bg-white dark:bg-black rounded-lg border border-[#e0e0e0] dark:border-[#222] shadow-sm p-6 mb-5 animate-fade-in">
+          <div className="flex items-center justify-between mb-3">
             <div>
               <h2 className="text-xl font-semibold tracking-tight text-black dark:text-white">Capture Measurements</h2>
               <p className="text-sm text-[#666] dark:text-[#999]">
@@ -121,21 +121,21 @@ const Index = () => {
           </div>
           
           {isCapturing && (
-            <div className="mb-6">
+            <div className="mb-3">
               <div className="h-1.5 bg-[#eaeaea] dark:bg-[#222] rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-black dark:bg-white transition-all duration-100 ease-linear"
                   style={{ width: `${captureProgress}%` }}
                 ></div>
               </div>
-              <div className="flex justify-between mt-2">
+              <div className="flex justify-between mt-1">
                 <span className="text-xs text-[#666] dark:text-[#999]">Capturing...</span>
                 <span className="text-xs font-medium text-black dark:text-white">{Math.round(captureProgress)}%</span>
               </div>
             </div>
           )}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="border border-[#e0e0e0] dark:border-[#222] rounded-lg overflow-hidden">
               <Webcam width={640} height={480} isCapturing={isCapturing} />
             </div>
