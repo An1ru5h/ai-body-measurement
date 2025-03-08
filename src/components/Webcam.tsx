@@ -85,7 +85,7 @@ const Webcam: React.FC<WebcamProps> = ({ width, height, isCapturing = false }) =
   }, [isCapturing]);
   
   return (
-    <div className="relative w-full h-full bg-black/5 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg" style={{ minHeight: '600px' }}>
+    <div className="relative w-full h-full bg-black/5 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg" style={{ minHeight: '800px' }}>
       {cameraAvailable ? (
         <>
           <video 
@@ -95,7 +95,7 @@ const Webcam: React.FC<WebcamProps> = ({ width, height, isCapturing = false }) =
             muted
             className="w-full h-full object-cover"
             style={{ 
-              minHeight: '600px',
+              minHeight: '800px',
               filter: 'contrast(1.05) brightness(1.05)', // Slightly enhance contrast and brightness
             }}
           />
