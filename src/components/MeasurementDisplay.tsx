@@ -41,8 +41,8 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ measurements, i
         </div>
       </div>
       
-      <div className="p-4 max-h-[460px] overflow-y-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="p-4 max-h-[600px] overflow-y-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[450px]">
           {measurements.map((measurement) => (
             <div 
               key={measurement.id}
