@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Measurement, downloadCSV } from '../utils/measurements';
 import { Download, Shield } from 'lucide-react';
@@ -16,6 +17,7 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
   const [displayValues, setDisplayValues] = useState<Measurement[]>(measurements);
   const [hasStartedScan, setHasStartedScan] = useState(false);
   const [hasCompletedScan, setHasCompletedScan] = useState(false);
+  const [finalValues, setFinalValues] = useState<Measurement[]>([]);
 
   useEffect(() => {
     // Track if a scan has ever started
@@ -23,20 +25,37 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
       setHasStartedScan(true);
     }
     
-    // If scan is completed (was started but now stopped), mark it as completed
+    // If scan is completed (was started but now stopped), mark it as completed and generate final values
     if (hasStartedScan && !showZeroed && isLive && !hasCompletedScan) {
       setHasCompletedScan(true);
+      
+      // Generate stable final values when scan completes (once)
+      const stableValues = measurements.map(m => {
+        // Generate a stable value that's 80-95% of the real measurement
+        const stabilityFactor = 0.8 + (Math.random() * 0.15);
+        const stableValue = m.value * stabilityFactor;
+        
+        return {
+          ...m,
+          value: parseFloat(stableValue.toFixed(1))
+        };
+      });
+      
+      setFinalValues(stableValues);
     }
     
     // If zeroed is requested or we stopped in the middle of a scan
     if (showZeroed || (hasStartedScan && !showZeroed && isLive)) {
       // Start with zeroed measurements
       const zeroed = measurements.map(m => ({ ...m, value: 0 }));
-      setDisplayValues(zeroed);
-
-      // Only set up interval to update with random values if we're actively scanning
-      // or we've completed a scan (to keep showing random values)
-      if (showZeroed || hasCompletedScan) {
+      
+      if (hasCompletedScan) {
+        // If scan is completed, show the stable final values
+        setDisplayValues(finalValues.length > 0 ? finalValues : zeroed);
+      } else if (showZeroed) {
+        // Only show fluctuating values during active scanning
+        setDisplayValues(zeroed);
+        
         const interval = setInterval(() => {
           setDisplayValues(prev => 
             prev.map(m => {
@@ -57,14 +76,18 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
         }, 500); // Update every half second
 
         return () => clearInterval(interval);
+      } else {
+        // If stopped in the middle, just show zeroes
+        setDisplayValues(zeroed);
       }
     } else if (!isLive) {
       // Only show real measurements if we're viewing history
       setDisplayValues(measurements);
       setHasStartedScan(false);
       setHasCompletedScan(false);
+      setFinalValues([]);
     }
-  }, [measurements, showZeroed, isLive, hasStartedScan, hasCompletedScan]);
+  }, [measurements, showZeroed, isLive, hasStartedScan, hasCompletedScan, finalValues]);
     
   const avgConfidence = displayValues.reduce((sum, m) => sum + m.confidence, 0) / displayValues.length;
   
