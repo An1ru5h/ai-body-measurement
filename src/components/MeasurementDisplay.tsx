@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Measurement, downloadCSV } from '../utils/measurements';
 import { Download, Shield } from 'lucide-react';
@@ -16,11 +15,17 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
 }) => {
   const [displayValues, setDisplayValues] = useState<Measurement[]>(measurements);
   const [hasStartedScan, setHasStartedScan] = useState(false);
+  const [hasCompletedScan, setHasCompletedScan] = useState(false);
 
   useEffect(() => {
     // Track if a scan has ever started
     if (showZeroed && !hasStartedScan) {
       setHasStartedScan(true);
+    }
+    
+    // If scan is completed (was started but now stopped), mark it as completed
+    if (hasStartedScan && !showZeroed && isLive && !hasCompletedScan) {
+      setHasCompletedScan(true);
     }
     
     // If zeroed is requested or we stopped in the middle of a scan
@@ -30,7 +35,8 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
       setDisplayValues(zeroed);
 
       // Only set up interval to update with random values if we're actively scanning
-      if (showZeroed) {
+      // or we've completed a scan (to keep showing random values)
+      if (showZeroed || hasCompletedScan) {
         const interval = setInterval(() => {
           setDisplayValues(prev => 
             prev.map(m => {
@@ -52,12 +58,13 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
 
         return () => clearInterval(interval);
       }
-    } else {
-      // Only show real measurements if we've never started a scan or if we're viewing history
+    } else if (!isLive) {
+      // Only show real measurements if we're viewing history
       setDisplayValues(measurements);
       setHasStartedScan(false);
+      setHasCompletedScan(false);
     }
-  }, [measurements, showZeroed, isLive, hasStartedScan]);
+  }, [measurements, showZeroed, isLive, hasStartedScan, hasCompletedScan]);
     
   const avgConfidence = displayValues.reduce((sum, m) => sum + m.confidence, 0) / displayValues.length;
   
