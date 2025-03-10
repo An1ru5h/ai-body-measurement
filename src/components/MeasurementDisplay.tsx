@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Measurement, downloadCSV } from '../utils/measurements';
 import { Download, Shield } from 'lucide-react';
 
@@ -14,11 +14,41 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
   isLive, 
   showZeroed = false 
 }) => {
-  const displayedMeasurements = showZeroed 
-    ? measurements.map(m => ({ ...m, value: 0 })) 
-    : measurements;
+  const [displayValues, setDisplayValues] = useState<Measurement[]>(measurements);
+
+  useEffect(() => {
+    if (showZeroed) {
+      // Start with zeroed measurements
+      const zeroed = measurements.map(m => ({ ...m, value: 0 }));
+      setDisplayValues(zeroed);
+
+      // Set up interval to update with realistic random values during scan
+      const interval = setInterval(() => {
+        setDisplayValues(prev => 
+          prev.map(m => {
+            const originalMeasurement = measurements.find(om => om.id === m.id);
+            if (!originalMeasurement) return m;
+            
+            // Generate a value that gradually approaches the real measurement
+            // with some random fluctuation (between 70% and 95% of the real value)
+            const randomFactor = 0.7 + (Math.random() * 0.25);
+            const newValue = originalMeasurement.value * randomFactor;
+            
+            return {
+              ...m,
+              value: parseFloat(newValue.toFixed(1))
+            };
+          })
+        );
+      }, 500); // Update every half second
+
+      return () => clearInterval(interval);
+    } else {
+      setDisplayValues(measurements);
+    }
+  }, [measurements, showZeroed]);
     
-  const avgConfidence = displayedMeasurements.reduce((sum, m) => sum + m.confidence, 0) / displayedMeasurements.length;
+  const avgConfidence = displayValues.reduce((sum, m) => sum + m.confidence, 0) / displayValues.length;
   
   const handleExport = () => {
     downloadCSV(measurements);
@@ -52,7 +82,7 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
       
       <div className="p-4 max-h-[600px] overflow-y-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[450px]">
-          {displayedMeasurements.map((measurement) => (
+          {displayValues.map((measurement) => (
             <div 
               key={measurement.id}
               className="p-3 border border-[#e0e0e0] dark:border-[#333] rounded-md hover:bg-[#f8f8f8] dark:hover:bg-[#111] transition-colors"

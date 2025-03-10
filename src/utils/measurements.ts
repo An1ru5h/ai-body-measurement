@@ -1,4 +1,3 @@
-
 export interface Measurement {
   id: string;
   name: string;
@@ -81,13 +80,17 @@ export const calculateAverageConfidence = (measurements: Measurement[]): number 
   return sum / measurements.length;
 };
 
-// Export measurements to CSV format
+// Export measurements to CSV format with timestamp
 export const exportMeasurementsToCSV = (measurements: Measurement[]): string => {
-  const headers = "Name,Value,Unit,Date,Confidence\n";
+  const headers = "Name,Value,Unit,Date and Time,Confidence\n";
   
   const rows = measurements.map((measurement) => {
-    const date = new Date(measurement.date).toLocaleDateString();
-    return `${measurement.name},${measurement.value},${measurement.unit},${date},${measurement.confidence.toFixed(2)}`;
+    const dateObj = new Date(measurement.date);
+    const formattedDate = dateObj.toLocaleDateString();
+    const formattedTime = dateObj.toLocaleTimeString();
+    const dateTimeString = `${formattedDate} ${formattedTime}`;
+    
+    return `${measurement.name},${measurement.value},${measurement.unit},"${dateTimeString}",${measurement.confidence.toFixed(2)}`;
   }).join('\n');
   
   return headers + rows;
