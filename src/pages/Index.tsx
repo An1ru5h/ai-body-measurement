@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PoseLayout from '../components/PoseLayout';
 import Webcam from '../components/Webcam';
@@ -20,6 +19,7 @@ interface Connection {
 const Index = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureProgress, setCaptureProgress] = useState(0);
+  const [showZeroedMeasurements, setShowZeroedMeasurements] = useState(false);
   
   const mockLandmarks: Landmark[] = [
     { id: "nose", x: 320, y: 120 },
@@ -60,6 +60,7 @@ const Index = () => {
   const startCapture = () => {
     setIsCapturing(true);
     setCaptureProgress(0);
+    setShowZeroedMeasurements(true);
     
     const duration = 60; // 60 seconds (1 minute) instead of 7 minutes
     const interval = 100; // Update progress every 100ms for smoother animation
@@ -71,6 +72,7 @@ const Index = () => {
         if (newProgress >= 100) {
           clearInterval(timer);
           setIsCapturing(false);
+          setShowZeroedMeasurements(false);
           return 100;
         }
         return newProgress;
@@ -80,6 +82,7 @@ const Index = () => {
   
   const stopCapture = () => {
     setIsCapturing(false);
+    setShowZeroedMeasurements(false);
   };
   
   return (
@@ -140,7 +143,7 @@ const Index = () => {
               <Webcam width={640} height={480} isCapturing={isCapturing} />
             </div>
             <div>
-              <MeasurementDisplay measurements={mockMeasurements} isLive={true} />
+              <MeasurementDisplay measurements={mockMeasurements} isLive={true} showZeroed={showZeroedMeasurements} />
             </div>
           </div>
         </div>

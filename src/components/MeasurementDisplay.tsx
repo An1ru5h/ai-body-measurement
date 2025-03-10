@@ -6,10 +6,19 @@ import { Download, Shield } from 'lucide-react';
 interface MeasurementDisplayProps {
   measurements: Measurement[];
   isLive: boolean;
+  showZeroed?: boolean;
 }
 
-const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ measurements, isLive }) => {
-  const avgConfidence = measurements.reduce((sum, m) => sum + m.confidence, 0) / measurements.length;
+const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ 
+  measurements, 
+  isLive, 
+  showZeroed = false 
+}) => {
+  const displayedMeasurements = showZeroed 
+    ? measurements.map(m => ({ ...m, value: 0 })) 
+    : measurements;
+    
+  const avgConfidence = displayedMeasurements.reduce((sum, m) => sum + m.confidence, 0) / displayedMeasurements.length;
   
   const handleExport = () => {
     downloadCSV(measurements);
@@ -43,7 +52,7 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({ measurements, i
       
       <div className="p-4 max-h-[600px] overflow-y-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[450px]">
-          {measurements.map((measurement) => (
+          {displayedMeasurements.map((measurement) => (
             <div 
               key={measurement.id}
               className="p-3 border border-[#e0e0e0] dark:border-[#333] rounded-md hover:bg-[#f8f8f8] dark:hover:bg-[#111] transition-colors"
