@@ -15,38 +15,49 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
   showZeroed = false 
 }) => {
   const [displayValues, setDisplayValues] = useState<Measurement[]>(measurements);
+  const [hasStartedScan, setHasStartedScan] = useState(false);
 
   useEffect(() => {
-    if (showZeroed) {
+    // Track if a scan has ever started
+    if (showZeroed && !hasStartedScan) {
+      setHasStartedScan(true);
+    }
+    
+    // If zeroed is requested or we stopped in the middle of a scan
+    if (showZeroed || (hasStartedScan && !showZeroed && isLive)) {
       // Start with zeroed measurements
       const zeroed = measurements.map(m => ({ ...m, value: 0 }));
       setDisplayValues(zeroed);
 
-      // Set up interval to update with realistic random values during scan
-      const interval = setInterval(() => {
-        setDisplayValues(prev => 
-          prev.map(m => {
-            const originalMeasurement = measurements.find(om => om.id === m.id);
-            if (!originalMeasurement) return m;
-            
-            // Generate a value that gradually approaches the real measurement
-            // with some random fluctuation (between 70% and 95% of the real value)
-            const randomFactor = 0.7 + (Math.random() * 0.25);
-            const newValue = originalMeasurement.value * randomFactor;
-            
-            return {
-              ...m,
-              value: parseFloat(newValue.toFixed(1))
-            };
-          })
-        );
-      }, 500); // Update every half second
+      // Only set up interval to update with random values if we're actively scanning
+      if (showZeroed) {
+        const interval = setInterval(() => {
+          setDisplayValues(prev => 
+            prev.map(m => {
+              const originalMeasurement = measurements.find(om => om.id === m.id);
+              if (!originalMeasurement) return m;
+              
+              // Generate a value that gradually approaches the real measurement
+              // with some random fluctuation (between 70% and 95% of the real value)
+              const randomFactor = 0.7 + (Math.random() * 0.25);
+              const newValue = originalMeasurement.value * randomFactor;
+              
+              return {
+                ...m,
+                value: parseFloat(newValue.toFixed(1))
+              };
+            })
+          );
+        }, 500); // Update every half second
 
-      return () => clearInterval(interval);
+        return () => clearInterval(interval);
+      }
     } else {
+      // Only show real measurements if we've never started a scan or if we're viewing history
       setDisplayValues(measurements);
+      setHasStartedScan(false);
     }
-  }, [measurements, showZeroed]);
+  }, [measurements, showZeroed, isLive, hasStartedScan]);
     
   const avgConfidence = displayValues.reduce((sum, m) => sum + m.confidence, 0) / displayValues.length;
   

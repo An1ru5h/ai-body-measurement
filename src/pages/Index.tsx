@@ -20,6 +20,7 @@ const Index = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [captureProgress, setCaptureProgress] = useState(0);
   const [showZeroedMeasurements, setShowZeroedMeasurements] = useState(false);
+  const [scanStarted, setScanStarted] = useState(false);
   
   const mockLandmarks: Landmark[] = [
     { id: "nose", x: 320, y: 120 },
@@ -61,6 +62,7 @@ const Index = () => {
     setIsCapturing(true);
     setCaptureProgress(0);
     setShowZeroedMeasurements(true);
+    setScanStarted(true);
     
     const duration = 60; // 60 seconds (1 minute) instead of 7 minutes
     const interval = 100; // Update progress every 100ms for smoother animation
