@@ -18,6 +18,7 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
   const [hasStartedScan, setHasStartedScan] = useState(false);
   const [hasCompletedScan, setHasCompletedScan] = useState(false);
   const [finalValues, setFinalValues] = useState<Measurement[]>([]);
+  const [scanCount, setScanCount] = useState(0);
 
   useEffect(() => {
     // Track if a scan has ever started
@@ -28,16 +29,24 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
     // If scan is completed (was started but now stopped), mark it as completed and generate final values
     if (hasStartedScan && !showZeroed && isLive && !hasCompletedScan) {
       setHasCompletedScan(true);
+      setScanCount(prev => prev + 1);
       
-      // Generate stable final values when scan completes (once)
+      // Generate stable final values when scan completes
+      // Each time we complete a scan, we get more accurate (closer to real value)
       const stableValues = measurements.map(m => {
-        // Generate a stable value that's 80-95% of the real measurement
-        const stabilityFactor = 0.8 + (Math.random() * 0.15);
-        const stableValue = m.value * stabilityFactor;
+        // Generate a stable value that gets closer to real measurement with each scan
+        // First scan: 85-90% accurate, increases with each subsequent scan
+        const accuracyBase = Math.min(0.85 + (scanCount * 0.03), 0.98);
+        const accuracyVariation = Math.random() * 0.05; // Small variation
+        const accuracyFactor = accuracyBase + accuracyVariation;
+        
+        const stableValue = m.value * accuracyFactor;
         
         return {
           ...m,
-          value: parseFloat(stableValue.toFixed(1))
+          value: parseFloat(stableValue.toFixed(1)),
+          // Also increase confidence slightly with each scan
+          confidence: Math.min(m.confidence * (1 + scanCount * 0.02), 0.99)
         };
       });
       
@@ -87,7 +96,7 @@ const MeasurementDisplay: React.FC<MeasurementDisplayProps> = ({
       setHasCompletedScan(false);
       setFinalValues([]);
     }
-  }, [measurements, showZeroed, isLive, hasStartedScan, hasCompletedScan, finalValues]);
+  }, [measurements, showZeroed, isLive, hasStartedScan, hasCompletedScan, finalValues, scanCount]);
     
   const avgConfidence = displayValues.reduce((sum, m) => sum + m.confidence, 0) / displayValues.length;
   
